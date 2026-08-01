@@ -20,6 +20,22 @@ trained value against the reference values used in the paper,
 | Black–Scholes with default risk | 0.45 % | 0.46 % |
 | Reaction–diffusion | 0.93 % | 0.53 % |
 
+<p align="center">
+<img src="figures/deep_bsde_pnas_hjb_error.png" width="49%"> <img src="figures/deep_bsde_pnas_hjb_lambda.png" width="49%">
+</p>
+
+<p align="center"><em>Hamilton–Jacobi–Bellman equation, relative error at
+$\lambda = 1$ (left) and $u(0,(0,\dots,0))$ for $\lambda \in \lbrace 1,10,20,30,40,50 \rbrace$ (right).</em></p>
+
+<p align="center">
+<img src="figures/deep_bsde_pnas_hjb_init_stability.png" width="49%"> <img src="figures/deep_bsde_pnas_allencahn_init_stability.png" width="49%"><br>
+<img src="figures/deep_bsde_pnas_default_risk_init_stability.png" width="49%"> <img src="figures/deep_bsde_pnas_reaction_diffusion_init_stability.png" width="49%">
+</p>
+
+<p align="center"><em>Training from four starting values of $Y_0$ per example,
+Hamilton–Jacobi–Bellman (top left), Allen–Cahn (top right), default risk
+(bottom left) and reaction–diffusion (bottom right).</em></p>
+
 Every example is stated below as a PDE together with the equivalent BSDE that
 the solver actually discretizes. A full derivation of each step is given in
 `documentation.pdf`.
@@ -39,10 +55,8 @@ The equivalent BSDE is
 
 $$X_t = x + \sqrt{2} \, W_t, \qquad \mathrm{d}Y_t = \frac{\lambda}{2} \lVert Z_t \rVert^2 \, \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t, \qquad Y_T = g(X_T),$$
 
-where $Y_t = u(t, X_t)$ and $Z_t = \sqrt{2} \, \nabla u(t, X_t)$. Training at $\lambda = 1$, the
-relative error against the Monte Carlo reference over the iterations,
-
-<p align="center"><img src="figures/deep_bsde_pnas_hjb_error.png" width="60%"></p>
+where $Y_t = u(t, X_t)$ and $Z_t = \sqrt{2} \, \nabla u(t, X_t)$. The reference value
+is obtained from a Monte Carlo estimate of the closed-form representation.
 
 ### 2. Allen–Cahn equation
 
@@ -89,34 +103,3 @@ Each example is trained again from four starting values of the trainable
 initial value $Y_0$, one seed per value and all other settings unchanged. Every
 curve moves toward the reference and no run diverges or settles at a wrong
 level, a starting value further away only costs more iterations.
-
-<p align="center">
-<img src="figures/deep_bsde_pnas_hjb_init_stability.png" width="49%"> <img src="figures/deep_bsde_pnas_allencahn_init_stability.png" width="49%"><br>
-<img src="figures/deep_bsde_pnas_default_risk_init_stability.png" width="49%"> <img src="figures/deep_bsde_pnas_reaction_diffusion_init_stability.png" width="49%">
-</p>
-
-<p align="center"><em>Hamilton–Jacobi–Bellman (top left), Allen–Cahn (top right),
-default risk (bottom left) and reaction–diffusion (bottom right).</em></p>
-
-## Repository layout
-
-| Path | Content |
-| --- | --- |
-| `examples.ipynb` | Runs all four examples and generates every figure |
-| `documentation.tex`, `documentation.pdf` | Full derivations, parameters and results |
-| `source code/bsde/solver.py` | `DeepBSDESolver` — discretization, loss and training loop |
-| `source code/NN_model/networks.py` | `FeedForwardNet` — a small tanh multilayer perceptron |
-| `source code/plot_helpers/` | Plot functions shared by the examples |
-| `figures/` | Figures written by the notebook |
-
-Each example defines its PDE as a plain Python class in the notebook (drift,
-diffusion, driver `f` and terminal condition `g`), which is passed to
-`DeepBSDESolver`.
-
-## Running the notebook
-
-Requirements are Python 3.11+ with `torch`, `numpy`, `matplotlib`, `tqdm` and
-Jupyter. Open `examples.ipynb` in the repository root and run it top to bottom.
-The setup cell puts `source code/` on `sys.path` (the folder name contains a
-space, so it is not imported as a package) and all figures are saved to
-`figures/`.
