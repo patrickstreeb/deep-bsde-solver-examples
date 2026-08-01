@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# not part of the repository
+report/
+PracticalWork_Patrick.zip
+Solving high-dimensional partial differential equations using deep learning.pdf
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# iCloud placeholders
+*.icloud
