@@ -20,21 +20,31 @@ trained value against the reference values used in the paper,
 | Black–Scholes with default risk | 0.45 % | 0.46 % |
 | Reaction–diffusion | 0.93 % | 0.53 % |
 
+The two plots below show the training and the approximation of the initial
+value for the Hamilton–Jacobi–Bellman equation. On the left, the relative error
+against the Monte Carlo reference falls over the training iterations at
+$\lambda = 1$. On the right, the trained initial value $u(0,(0,\dots,0))$ is
+compared with that reference for the six values of $\lambda$, where the largest
+deviation is 1.20 % at $\lambda = 50$.
+
 <p align="center">
 <img src="figures/deep_bsde_pnas_hjb_error.png" width="49%"> <img src="figures/deep_bsde_pnas_hjb_lambda.png" width="49%">
 </p>
 
-<p align="center"><em>Hamilton–Jacobi–Bellman equation, relative error at
-$\lambda = 1$ (left) and $u(0,(0,\dots,0))$ for $\lambda \in \lbrace 1,10,20,30,40,50 \rbrace$ (right).</em></p>
+The next four plots test how much the approximation of the initial value
+depends on where the training starts. Each example is trained again from four
+starting values of the trainable initial value $Y_0$, one seed per value and
+all other settings unchanged, for the Hamilton–Jacobi–Bellman equation (top
+left), the Allen–Cahn equation (top right), the default risk equation (bottom
+left) and the reaction–diffusion equation (bottom right). Every curve moves
+toward the same reference and no run diverges or settles at a wrong level, so a
+starting value further away only costs more iterations and does not change the
+value that is found.
 
 <p align="center">
 <img src="figures/deep_bsde_pnas_hjb_init_stability.png" width="49%"> <img src="figures/deep_bsde_pnas_allencahn_init_stability.png" width="49%"><br>
 <img src="figures/deep_bsde_pnas_default_risk_init_stability.png" width="49%"> <img src="figures/deep_bsde_pnas_reaction_diffusion_init_stability.png" width="49%">
 </p>
-
-<p align="center"><em>Training from four starting values of $Y_0$ per example,
-Hamilton–Jacobi–Bellman (top left), Allen–Cahn (top right), default risk
-(bottom left) and reaction–diffusion (bottom right).</em></p>
 
 Every example is stated below as a PDE together with the equivalent BSDE that
 the solver actually discretizes. A full derivation of each step is given in
@@ -96,10 +106,3 @@ $$X_t = x + W_t, \qquad \mathrm{d}Y_t = -\min\left(1, \left(Y_t - u^\ast(t, X_t)
 
 For this equation the notebook additionally studies how the accuracy improves
 with the number of hidden layers per subnetwork.
-
-### Stability in the starting value
-
-Each example is trained again from four starting values of the trainable
-initial value $Y_0$, one seed per value and all other settings unchanged. Every
-curve moves toward the reference and no run diverges or settles at a wrong
-level, a starting value further away only costs more iterations.

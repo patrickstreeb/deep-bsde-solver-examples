@@ -8,6 +8,9 @@ report/
 PracticalWork_Patrick.zip
 Solving high-dimensional partial differential equations using deep learning.pdf
 
+# LaTeX sources, only the compiled documentation.pdf is published
+*.tex
+
 # LaTeX build artifacts
 *.aux
 *.log
