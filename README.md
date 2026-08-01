@@ -28,7 +28,7 @@ the solver actually discretizes. A full derivation of each step is given in
 
 The example starts from the stochastic control problem
 
-$$\inf_{(m_t)_{t \in [0,T]}} \mathbb{E}\left[\int_0^T \lVert m_t \rVert^2 \, \mathrm{d}t + g(X_T)\right], \qquad \mathrm{d}X_t = 2\sqrt{\lambda} \\, m_t \\, \mathrm{d}t + \sqrt{2} \\, \mathrm{d}W_t, \qquad X_0 = x,$$
+$$\inf_{(m_t)_{t \in [0,T]}} \mathbb{E}\left[\int_0^T \lVert m_t \rVert^2 \, \mathrm{d}t + g(X_T)\right], \qquad \mathrm{d}X_t = 2\sqrt{\lambda} \, m_t \, \mathrm{d}t + \sqrt{2} \, \mathrm{d}W_t, \qquad X_0 = x,$$
 
 with terminal cost $g(x) = \ln\left(\frac{1}{2}\left(1 + \lVert x \rVert^2\right)\right)$. Its value function solves the
 Hamilton–Jacobi–Bellman equation, which reduces after evaluating the minimum to
@@ -37,9 +37,9 @@ $$\partial_t u + \Delta u - \lambda \lVert \nabla u \rVert^2 = 0, \qquad u(T,x) 
 
 The equivalent BSDE is
 
-$$X_t = x + \sqrt{2} \\, W_t, \qquad \mathrm{d}Y_t = \frac{\lambda}{2} \lVert Z_t \rVert^2 \\, \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t, \qquad Y_T = g(X_T),$$
+$$X_t = x + \sqrt{2} \, W_t, \qquad \mathrm{d}Y_t = \frac{\lambda}{2} \lVert Z_t \rVert^2 \, \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t, \qquad Y_T = g(X_T),$$
 
-where $Y_t = u(t, X_t)$ and $Z_t = \sqrt{2} \\, \nabla u(t, X_t)$. Training at $\lambda = 1$, the
+where $Y_t = u(t, X_t)$ and $Z_t = \sqrt{2} \, \nabla u(t, X_t)$. Training at $\lambda = 1$, the
 relative error against the Monte Carlo reference over the iterations,
 
 <p align="center"><img src="figures/deep_bsde_pnas_hjb_error.png" width="60%"></p>
@@ -53,19 +53,19 @@ $$\partial_t v + \Delta v + v - v^3 = 0, \qquad v(T,x) = g(x) = \frac{1}{2 + 0.4
 
 with the equivalent BSDE
 
-$$X_t = \sqrt{2} \\, W_t, \qquad \mathrm{d}Y_t = -\left(Y_t - Y_t^3\right) \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t, \qquad Y_T = g(X_T).$$
+$$X_t = \sqrt{2} \, W_t, \qquad \mathrm{d}Y_t = -\left(Y_t - Y_t^3\right) \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t, \qquad Y_T = g(X_T).$$
 
 ### 3. Nonlinear Black–Scholes equation with default risk
 
 The claim is written on 100 underlyings and its issuer may default, with an
 intensity $Q$ that decreases in the current value. The price solves
 
-$$\partial_t u + \bar{\mu} \\, x \cdot \nabla u + \frac{\bar{\sigma}^2}{2} \sum_{i=1}^{100} x_i^2 \\, \partial_{x_i}^2 u - (1 - \delta) \\, Q(u) \\, u - R \\, u = 0, \qquad u(T,x) = \min(x_1, \dots, x_{100}),$$
+$$\partial_t u + \bar{\mu} \, x \cdot \nabla u + \frac{\bar{\sigma}^2}{2} \sum_{i=1}^{100} x_i^2 \, \partial_{x_i}^2 u - (1 - \delta) \, Q(u) \, u - R \, u = 0, \qquad u(T,x) = \min(x_1, \dots, x_{100}),$$
 
 and the equivalent BSDE, forward-driven by componentwise geometric Brownian
 motion, is
 
-$$\mathrm{d}X_t^i = \bar{\mu} \\, X_t^i \\, \mathrm{d}t + \bar{\sigma} \\, X_t^i \\, \mathrm{d}W_t^i, \qquad \mathrm{d}Y_t = \left[(1 - \delta) \\, Q(Y_t) + R\right] Y_t \\, \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t,$$
+$$\mathrm{d}X_t^i = \bar{\mu} \, X_t^i \, \mathrm{d}t + \bar{\sigma} \, X_t^i \, \mathrm{d}W_t^i, \qquad \mathrm{d}Y_t = \left[(1 - \delta) \, Q(Y_t) + R\right] Y_t \, \mathrm{d}t + Z_t^{\top} \mathrm{d}W_t,$$
 
 with terminal condition $Y_T = \min(X_T^1, \dots, X_T^{100})$.
 
